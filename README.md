@@ -18,4 +18,6 @@ To create a Mandelbrot set plot, run:
 
 This will create an output png centered at (0.0,0.0) with a radius of 2, with a resolution of 1000x1000, and run at 200 max iterations per pixel.
 
+You can change the color map in display.py.
+
 Requiers numpy and matplotlib.

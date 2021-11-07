@@ -1,3 +1,5 @@
+all: julia mandelbrot
+
 julia: julia.c
 	gcc julia.c -O3 -o julia
 
