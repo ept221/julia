@@ -3,15 +3,23 @@
 #include <complex.h>
 #include <png.h>
 
-void julia(int *frame, int resolution, int max_itter, double complex c)
+void julia(int *frame, double p_x, double p_y, double radius, int resolution, int max_itter, double complex c)
 {
-	double x_step = 4.0/((float)resolution);
-	double y_step = 4.0/((float)resolution);
+
+	double x_min = p_x-radius;
+	double x_max = p_x+radius;
+
+	double y_min = p_y-radius;
+	double y_max = p_y+radius;
+
+	double x_step = (x_max-x_min)/((float)resolution);
+	double y_step = (y_max-y_min)/((float)resolution);
+
 	for(int y = 0; y < resolution; y++)
 	{
 		for(int x = 0; x < resolution; x++)
 		{
-			double complex z = (-2.0+(x*x_step)) + (-2.0+(y*y_step))*I;
+			double complex z = (x_min+(x*x_step)) + (y_max-(y*y_step))*I;
 			int i = 0;
 			for( ; i < max_itter; i++)
 			{
@@ -28,15 +36,19 @@ void julia(int *frame, int resolution, int max_itter, double complex c)
 
 int main(int argc, char *argv[])
 {
-	if(argc != 4)
+	if(argc != 8)
 	{
-		printf("Error: Expecting 3 params!\n");
+		printf("Error: Expecting 7 params!\n");
 		return 1;
 	}
 
-	int resolution = atoi(argv[1]);
 	char *ptr;
-	double complex c = strtod(argv[2],&ptr) + strtod(argv[3],&ptr)*I;
+	double p_x = strtod(argv[1],&ptr);
+	double p_y = strtod(argv[2],&ptr);
+	double radius = strtod(argv[3],&ptr);
+	int resolution = atoi(argv[4]);
+	int max_itter = atoi(argv[5]);
+	double complex c = strtod(argv[6],&ptr) + strtod(argv[7],&ptr)*I;
 
 	int *frame = malloc(sizeof(int[resolution][resolution]));
 	if(frame == NULL)
@@ -45,7 +57,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	julia(frame, resolution, 200, c);
+	julia(frame, p_x, p_y, radius, resolution, max_itter, c);
 
 	FILE *fp = fopen("julia.dat", "w");
 	if(fp == NULL)
