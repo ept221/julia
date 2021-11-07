@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	julia(frame, resolution, 150, c);
+	julia(frame, resolution, 200, c);
 
 	FILE *fp = fopen("julia.dat", "w");
 	if(fp == NULL)

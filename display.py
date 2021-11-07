@@ -9,4 +9,4 @@ with open("julia.dat") as data:
 		frame.append(list(map(int,line.strip().split(","))))
 
 cmap = plt.cm.gist_heat
-plt.imsave("test.png",frame,cmap=cmap)
+plt.imsave("julia.png",frame,cmap=cmap)
