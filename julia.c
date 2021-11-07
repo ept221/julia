@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <complex.h>
+#include <png.h>
 
 void julia(int *frame, int resolution, int max_itter, double complex c)
 {
@@ -53,9 +54,13 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	for(int i = 0; i < resolution*resolution; i++)
+	for(int y = 0; y < resolution; y++)
 	{
-		fprintf(fp,"%d\n",frame[i]);
+		for(int x = 0; x < resolution - 1; x++)
+		{
+			fprintf(fp,"%d,",frame[y*resolution+x]);
+		}
+		fprintf(fp,"%d\n",frame[y*resolution+resolution-1]);
 	}
 
 	free(frame);
