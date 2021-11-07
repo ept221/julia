@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <complex.h>
 
-void julia(int *frame, double p_x, double p_y, double radius, int resolution, int max_itter, double complex c)
+void mandelbrot(int *frame, double p_x, double p_y, double radius, int resolution, int max_itter)
 {
 
 	double x_min = p_x-radius;
@@ -18,7 +18,8 @@ void julia(int *frame, double p_x, double p_y, double radius, int resolution, in
 	{
 		for(int x = 0; x < resolution; x++)
 		{
-			double complex z = (x_min+(x*x_step)) + (y_max-(y*y_step))*I;
+			double complex z = 0 + 0*I;
+			double complex c = (x_min+(x*x_step)) + (y_max-(y*y_step))*I;
 			int i = 0;
 			for( ; i < max_itter; i++)
 			{
@@ -35,9 +36,9 @@ void julia(int *frame, double p_x, double p_y, double radius, int resolution, in
 
 int main(int argc, char *argv[])
 {
-	if(argc != 8)
+	if(argc != 6)
 	{
-		printf("Error: Expecting 7 params!\n");
+		printf("Error: Expecting 5 params!\n");
 		return 1;
 	}
 
@@ -47,7 +48,6 @@ int main(int argc, char *argv[])
 	double radius = strtod(argv[3],&ptr);
 	int resolution = atoi(argv[4]);
 	int max_itter = atoi(argv[5]);
-	double complex c = strtod(argv[6],&ptr) + strtod(argv[7],&ptr)*I;
 
 	int *frame = malloc(sizeof(int[resolution][resolution]));
 	if(frame == NULL)
@@ -56,9 +56,9 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	julia(frame, p_x, p_y, radius, resolution, max_itter, c);
+	mandelbrot(frame, p_x, p_y, radius, resolution, max_itter);
 
-	FILE *fp = fopen("julia.dat", "w");
+	FILE *fp = fopen("mandelbrot.dat", "w");
 	if(fp == NULL)
 	{
 		printf("Error: Could not open file!\n");
