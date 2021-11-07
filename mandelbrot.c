@@ -1,9 +1,35 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <complex.h>
+#include <pthread.h>
 
-void mandelbrot(int *frame, double p_x, double p_y, double radius, int resolution, int max_itter)
+typedef struct
 {
+	int *frame;
+	double p_x;
+	double p_y;
+	double radius;
+	int resolution;
+	int max_itter;
+	int x_start;
+	int x_end;
+	int y_start;
+	int y_end;
+} arg_struct;
+
+void* compute(void *args)
+{
+
+	int *frame = ((arg_struct*)args)->frame;
+	double p_x = ((arg_struct*)args)->p_x;
+	double p_y = ((arg_struct*)args)->p_y;
+	double radius = ((arg_struct*)args)->radius;
+	int resolution = ((arg_struct*)args)->resolution;
+	int max_itter = ((arg_struct*)args)->max_itter;
+	int x_start = ((arg_struct*)args)->x_start;
+	int x_end = ((arg_struct*)args)->x_end;
+	int y_start = ((arg_struct*)args)->y_start;
+	int y_end = ((arg_struct*)args)->y_end;
 
 	double x_min = p_x-radius;
 	double x_max = p_x+radius;
@@ -14,9 +40,9 @@ void mandelbrot(int *frame, double p_x, double p_y, double radius, int resolutio
 	double x_step = (x_max-x_min)/((float)resolution);
 	double y_step = (y_max-y_min)/((float)resolution);
 
-	for(int y = 0; y < resolution; y++)
+	for(int y = y_start; y < y_end; y++)
 	{
-		for(int x = 0; x < resolution; x++)
+		for(int x = x_start; x < x_end; x++)
 		{
 			double complex z = 0 + 0*I;
 			double complex c = (x_min+(x*x_step)) + (y_max-(y*y_step))*I;
@@ -32,6 +58,53 @@ void mandelbrot(int *frame, double p_x, double p_y, double radius, int resolutio
 			frame[y*resolution+x] = i;
 		}
 	}
+	return NULL;
+}
+
+void mandelbrot(int *frame, double p_x, double p_y, double radius, int resolution, int max_itter)
+{
+
+	arg_struct args[4];
+	for(int i = 0; i < 4; i++)
+	{
+		args[i].frame = frame;
+		args[i].p_x = p_x;
+		args[i].p_y = p_y;
+		args[i].radius = radius;
+		args[i].resolution = resolution;
+		args[i].max_itter = max_itter;
+	}
+	args[0].x_start = 0;					// top left
+	args[0].x_end = resolution/2;
+	args[0].y_start = 0;
+	args[0].y_end = resolution/2;
+	//***********************************
+	args[1].x_start = resolution/2;			// top right
+	args[1].x_end = resolution;
+	args[1].y_start = 0;
+	args[1].y_end = resolution/2;
+	//***********************************
+	args[2].x_start = 0;					// bottom left
+	args[2].x_end = resolution/2;
+	args[2].y_start = resolution/2;
+	args[2].y_end = resolution;
+	//***********************************
+	args[3].x_start = resolution/2;			// bottom right
+	args[3].x_end = resolution;
+	args[3].y_start = resolution/2;
+	args[3].y_end = resolution;
+	//***********************************
+	pthread_t threads[4];
+	pthread_create(&threads[0], NULL, compute, &args[0]);
+	pthread_create(&threads[1], NULL, compute, &args[1]);
+	pthread_create(&threads[2], NULL, compute, &args[2]);
+	pthread_create(&threads[3], NULL, compute, &args[3]);
+
+	for(int i = 0; i < 4; i++)
+	{
+		pthread_join(threads[i],NULL);
+	}
+	
 }
 
 int main(int argc, char *argv[])
@@ -75,6 +148,6 @@ int main(int argc, char *argv[])
 	}
 
 	free(frame);
-
+	pthread_exit(NULL);
 	return 0;
 }
