@@ -119,20 +119,13 @@ int main(int argc, char *argv[])
 
 	julia(frame, p_x, p_y, radius, resolution, max_itter, c);
 
-	FILE *fp = fopen("julia.dat", "w");
-	if(fp == NULL)
-	{
-		printf("Error: Could not open file!\n");
-		return 1;
-	}
-
 	for(int y = 0; y < resolution; y++)
 	{
 		for(int x = 0; x < resolution - 1; x++)
 		{
-			fprintf(fp,"%d,",frame[y*resolution+x]);
+			printf("%d,",frame[y*resolution+x]);
 		}
-		fprintf(fp,"%d\n",frame[y*resolution+resolution-1]);
+		printf("%d\n",frame[y*resolution+resolution-1]);
 	}
 
 	free(frame);
