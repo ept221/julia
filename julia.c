@@ -12,8 +12,6 @@ typedef struct
 	int resolution;
 	int max_itter;
 	double complex c;
-	int x_start;
-	int x_end;
 	int y_start;
 	int y_end;
 } arg_struct;
@@ -28,8 +26,6 @@ void* compute(void *args)
 	int resolution = ((arg_struct*)args)->resolution;
 	int max_itter = ((arg_struct*)args)->max_itter;
 	double complex c = ((arg_struct*)args)->c;
-	int x_start = ((arg_struct*)args)->x_start;
-	int x_end = ((arg_struct*)args)->x_end;
 	int y_start = ((arg_struct*)args)->y_start;
 	int y_end = ((arg_struct*)args)->y_end;
 
@@ -44,7 +40,7 @@ void* compute(void *args)
 
 	for(int y = y_start; y < y_end; y++)
 	{
-		for(int x = x_start; x < x_end; x++)
+		for(int x = 0; x < resolution; x++)
 		{
 			double complex z = (x_min+(x*x_step)) + (y_max-(y*y_step))*I;
 			int i = 0;
@@ -76,26 +72,13 @@ void julia(int *frame, double p_x, double p_y, double radius, int resolution, in
 		args[i].max_itter = max_itter;
 		args[i].c = c;
 	}
-	args[0].x_start = 0;					// top left
-	args[0].x_end = resolution/2;
-	args[0].y_start = 0;
-	args[0].y_end = resolution/2;
-	//***********************************
-	args[1].x_start = resolution/2;			// top right
-	args[1].x_end = resolution;
-	args[1].y_start = 0;
-	args[1].y_end = resolution/2;
-	//***********************************
-	args[2].x_start = 0;					// bottom left
-	args[2].x_end = resolution/2;
-	args[2].y_start = resolution/2;
-	args[2].y_end = resolution;
-	//***********************************
-	args[3].x_start = resolution/2;			// bottom right
-	args[3].x_end = resolution;
-	args[3].y_start = resolution/2;
-	args[3].y_end = resolution;
-	//***********************************
+
+	for(int i = 0; i < 4; i++)
+	{
+		args[i].y_start = i*(resolution/4);
+		args[i].y_end= (i+1)*(resolution/4);
+	}
+	
 	pthread_t threads[4];
 	pthread_create(&threads[0], NULL, compute, &args[0]);
 	pthread_create(&threads[1], NULL, compute, &args[1]);
