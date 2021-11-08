@@ -8,7 +8,7 @@ with open(sys.argv[2]+".dat") as data:
 	for line in data:
 		frame.append(list(map(int,line.strip().split(","))))
 
-cmap = plt.cm.gist_heat_r
+#cmap = plt.cm.gist_heat_r
 #cmap = plt.cm.magma
-#cmap = plt.cm.binary
+cmap = plt.cm.binary
 plt.imsave(sys.argv[2]+".png",frame,cmap=cmap)

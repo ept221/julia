@@ -3,6 +3,8 @@
 #include <complex.h>
 #include <pthread.h>
 
+#define THREAD_COUNT 4
+
 typedef struct
 {
 	int *frame;
@@ -60,8 +62,8 @@ void* compute(void *args)
 void mandelbrot(int *frame, double p_x, double p_y, double radius, int resolution, int max_itter)
 {
 
-	arg_struct args[4];
-	for(int i = 0; i < 4; i++)
+	arg_struct args[THREAD_COUNT];
+	for(int i = 0; i < THREAD_COUNT; i++)
 	{
 		args[i].frame = frame;
 		args[i].p_x = p_x;
@@ -72,19 +74,19 @@ void mandelbrot(int *frame, double p_x, double p_y, double radius, int resolutio
 	}
 
 
-	for(int i = 0; i < 4; i++)
+	for(int i = 0; i < THREAD_COUNT; i++)
 	{
-		args[i].y_start = i*(resolution/4);
-		args[i].y_end= (i+1)*(resolution/4);
+		args[i].y_start = i*(resolution/THREAD_COUNT);
+		args[i].y_end= (i+1)*(resolution/THREAD_COUNT);
 	}
 
-	pthread_t threads[4];
-	pthread_create(&threads[0], NULL, compute, &args[0]);
-	pthread_create(&threads[1], NULL, compute, &args[1]);
-	pthread_create(&threads[2], NULL, compute, &args[2]);
-	pthread_create(&threads[3], NULL, compute, &args[3]);
+	pthread_t threads[THREAD_COUNT];
+	for(int i = 0; i < THREAD_COUNT; i++)
+	{
+		pthread_create(&threads[i], NULL, compute, &args[i]);
+	}
 
-	for(int i = 0; i < 4; i++)
+	for(int i = 0; i < THREAD_COUNT; i++)
 	{
 		pthread_join(threads[i],NULL);
 	}
