@@ -2,9 +2,11 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 
-frame = []
-for line in sys.stdin:
-	frame.append(list(map(int,line.strip().split(","))))
+data = sys.stdin.buffer.read()
+frame = np.frombuffer(data, dtype=np.uint16)
+
+resolution = int(sys.argv[2])
+frame = frame.reshape(resolution,resolution)
 
 #cmap = plt.cm.gist_heat_r
 #cmap = plt.cm.magma

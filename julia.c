@@ -7,12 +7,12 @@
 
 typedef struct
 {
-	int *frame;
+	uint16_t *frame;
 	double p_x;
 	double p_y;
 	double radius;
 	int resolution;
-	int max_itter;
+	uint16_t max_itter;
 	double complex c;
 	int y_start;
 	int y_end;
@@ -21,12 +21,12 @@ typedef struct
 void* compute(void *args)
 {
 
-	int *frame = ((arg_struct*)args)->frame;
+	uint16_t *frame = ((arg_struct*)args)->frame;
 	double p_x = ((arg_struct*)args)->p_x;
 	double p_y = ((arg_struct*)args)->p_y;
 	double radius = ((arg_struct*)args)->radius;
 	int resolution = ((arg_struct*)args)->resolution;
-	int max_itter = ((arg_struct*)args)->max_itter;
+	uint16_t max_itter = ((arg_struct*)args)->max_itter;
 	double complex c = ((arg_struct*)args)->c;
 	int y_start = ((arg_struct*)args)->y_start;
 	int y_end = ((arg_struct*)args)->y_end;
@@ -45,7 +45,7 @@ void* compute(void *args)
 		for(int x = 0; x < resolution; x++)
 		{
 			double complex z = (x_min+(x*x_step)) + (y_max-(y*y_step))*I;
-			int i = 0;
+			uint16_t i = 0;
 			for( ; i < max_itter; i++)
 			{
 				z = (z *z ) + c;
@@ -60,7 +60,7 @@ void* compute(void *args)
 	return NULL;
 }
 
-void julia(int *frame, double p_x, double p_y, double radius, int resolution, int max_itter, double complex c)
+void julia(uint16_t *frame, double p_x, double p_y, double radius, int resolution, int max_itter, double complex c)
 {
 
 	arg_struct args[THREAD_COUNT];
@@ -107,10 +107,10 @@ int main(int argc, char *argv[])
 	double p_y = strtod(argv[2],&ptr);
 	double radius = strtod(argv[3],&ptr);
 	int resolution = atoi(argv[4]);
-	int max_itter = atoi(argv[5]);
+	uint16_t max_itter = atoi(argv[5]);
 	double complex c = strtod(argv[6],&ptr) + strtod(argv[7],&ptr)*I;
 
-	int *frame = malloc(sizeof(int[resolution][resolution]));
+	uint16_t *frame = malloc(sizeof(uint16_t[resolution][resolution]));
 	if(frame == NULL)
 	{
 		printf("Error: Could not allocate frame!\n");
@@ -118,16 +118,8 @@ int main(int argc, char *argv[])
 	}
 
 	julia(frame, p_x, p_y, radius, resolution, max_itter, c);
-
-	for(int y = 0; y < resolution; y++)
-	{
-		for(int x = 0; x < resolution - 1; x++)
-		{
-			printf("%d,",frame[y*resolution+x]);
-		}
-		printf("%d\n",frame[y*resolution+resolution-1]);
-	}
-
+	fwrite(frame,sizeof(uint16_t),resolution*resolution,stdout);
+	
 	free(frame);
 
 	return 0;
