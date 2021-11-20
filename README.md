@@ -25,4 +25,4 @@ Requiers numpy and matplotlib.
 M:
 ![mandelbrot](resources/mandelbrot.png)
 J:
-![mandelbrot](resources/julia.png)
+![julia](resources/julia.png)
