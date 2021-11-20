@@ -21,3 +21,6 @@ This will create an output png centered at (0.0,0.0) with a radius of 2, with a 
 You can change the color map in display.py.
 
 Requiers numpy and matplotlib.
+
+![mandelbrot](resources/mandelbrot.png)
+![mandelbrot](resources/julia.png)
