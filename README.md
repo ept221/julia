@@ -22,7 +22,7 @@ You can change the color map in display.py.
 
 Requiers numpy and matplotlib.
 
-M:
-![mandelbrot](resources/mandelbrot.png)
-J:
+![mandelbrot](resources/mandelbrot0.png)
+![mandelbrot](resources/mandelbrot1.png)
+![mandelbrot](resources/mandelbrot2.png)
 ![julia](resources/julia.png)
