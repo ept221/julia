@@ -1,11 +1,12 @@
 all: julia mandelbrot
 
-julia: julia.c
-	gcc julia.c -O3 -o julia -lpthread -lm
+julia: src/julia.c
+	mkdir -p bin
+	gcc src/julia.c -O3 -o bin/julia -lpthread -lm
 
-mandelbrot: mandelbrot.c
-	gcc mandelbrot.c -O3 -o mandelbrot -lpthread -lm
+mandelbrot: src/mandelbrot.c
+	mkdir -p bin
+	gcc src/mandelbrot.c -O3 -o bin/mandelbrot -lpthread -lm
 
 clean:
-	rm julia
-	rm mandelbrot
+	rm -rf bin
