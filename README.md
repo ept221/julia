@@ -22,6 +22,8 @@ The output images are placed into the ```pics/``` directory. The scripts ```juli
 
 You can change the color map in ```display.py```.
 
+To take advantage of multiple cores, you can change the number of threads to process the image on by redefining ```THREAD_COUNT``` at the top of ```mandelbrot.c``` and ```julia.c```.
+
 Requires python3, numpy, and matplotlib.
 
 ![mandelbrot](resources/mandelbrot0.png)
