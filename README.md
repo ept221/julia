@@ -20,7 +20,7 @@ This will create an output png centered at (0.0,0.0) with a radius of 2, with a 
 
 The output images are placed into the ```pics/``` directory. The scripts ```julia.sh``` and ```mandelbrot.sh``` automatically open their output in the default image view with the ```open``` command. This command works for macOS, but will have to be changed for other operating systems.
 
-You can change the color map in display.py.
+You can change the color map in ```display.py```.
 
 Requires python3, numpy, and matplotlib.
 
