@@ -24,7 +24,7 @@ You can change the color map in ```display.py```.
 
 To take advantage of multiple cores, you can change the number of threads to process the image on by redefining ```THREAD_COUNT``` at the top of ```mandelbrot.c``` and ```julia.c```.
 
-Requires python3, numpy, and matplotlib.
+The project requires python3, numpy, and matplotlib.
 
 ![mandelbrot](resources/mandelbrot0.png)
 ![mandelbrot](resources/mandelbrot1.png)
